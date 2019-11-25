@@ -1,0 +1,48 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: movecity-deployment
+  labels:
+    app: movecity
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: movecity
+  template:
+    metadata:
+      labels:
+        app: movecity
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: movecity1
+        image: miguelmcell/movecity:dev
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+          - name: "PASSWORD"
+            value: testpass123!@#
+          - name: "DB"
+            value: testdb
+          - name: "HOST"
+            value: 35.225.61.225
+          - name: "USER"
+            value: root
+      restartPolicy: Always
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: movecity-nodeport
+spec:
+  type: NodePort
+  ports:
+          - protocol: TCP
+            port: 3000
+            targetPort: 80
+  selector:
+          app: movecity
+

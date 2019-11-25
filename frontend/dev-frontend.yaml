@@ -1,0 +1,36 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: frontend-dev-deployment
+  labels:
+    app: frontend-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-dev
+  template:
+    metadata:
+      labels:
+        app: frontend-dev
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: frontend-dev
+        image: miguelmcell/ethical_frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      restartPolicy: Always
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: frontend-dev-nodeport
+spec:
+  type: LoadBalancer
+  ports:
+          - port: 80
+            targetPort: 80
+  selector:
+          app: frontend-dev
