@@ -22,7 +22,7 @@ app.get('/getAccount', function (req, res) {
     // Executing the MySQL query (select all data from the 'users' table).
     let sqlQuery = 'SELECT * FROM users WHERE account_id ="' + accountId + '"';
     connection.query(sqlQuery, function(error,results,fields){
-      if(error) throw error;
+      if(error) res.status(500).send('Err 500: Internal Server Error');
       res.send(results);
     });
 });
