@@ -26,8 +26,9 @@ export default class About extends Component {
 		if (this.state.value != ''){
 			let id = Math.floor(100000000000 + Math.random() * 900000000000)
 			let query = 'INSERT%20INTO%20users(account_id,plain_text_password,name)%20VALUES%20("'+id+'","tempPassword123","'+this.state.value+'");'
-			fetch('http://35.188.102.108:8080/createAccount/'+query,{
-				method: 'post'
+			fetch('http://35.188.102.108:8080/createAccount',{
+				method: 'post',
+				body: '{'query': '+query+'}'
 			})
 			.then(response => console.log(response))
 			.then(users => {

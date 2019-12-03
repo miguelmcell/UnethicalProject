@@ -12,6 +12,7 @@ const connection = mysql.createConnection({
 
 const app = express();
 app.use(cors());
+app.use(express.urlencoded())
 connection.connect();
 // 253153934829
 // Creating a GET route that returns data from the 'users' table.
@@ -25,13 +26,14 @@ app.get('/getAccount', function (req, res) {
       res.send(results);
     });
 });
-app.post('/createAccount/:accountId', function (req, res) {
+app.post('/createAccount', function (req, res) {
     // Connecting to the database
     console.log("createaccount hit");
-    let accountId = req.params.accountId;
+    let query = req.body.query;
+    console.log(query);
     // Executing the MySQL query (select all data from the 'users' table).
     // INSERT INTO users(account_id,plain_text_password,name) VALUES ('458151934522', 'Money123', 'Tom');
-    let sqlQuery = '' + accountId;
+    let sqlQuery = '' + query;
     console.log("now querying");
     connection.query(sqlQuery, function(error,results,fields){
       if(error) throw error;
