@@ -24,7 +24,7 @@ export default class About extends Component {
   handleSubmit(evt) {
 		evt.preventDefault()
 		if (this.state.value != ''){
-			fetch('http://35.188.102.108:8080/getAccount/'+this.state.value)
+			fetch('http://35.188.102.108:8080/getAccount?accountId='+this.state.value)
 			.then(response => response.json())
 			.then(users => {
 				console.log(users);
