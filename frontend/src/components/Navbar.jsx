@@ -45,6 +45,9 @@ export default class Navbar extends Component {
                             <li className="nav-item">
                                 <a className="nav-link" href="/MaintainancePortal">Maintainance</a>
                             </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="/MaintainancePortalRegistration">Maintainance Registration</a>
+                            </li>
                         </ul>
                     </div>
                 </nav>

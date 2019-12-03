@@ -9,6 +9,7 @@ import Navbar from './components/Navbar';
 import Page1 from './pages/Page1'
 import Page2 from './pages/Page2'
 import Maintainance from './pages/Maintainance'
+import MaintainanceRegistration from './pages/Maintainance2'
 
 class App extends Component {
   render() {
@@ -27,6 +28,7 @@ class App extends Component {
                   <Route path="/Page1" component={Page1} />
                   <Route path="/Page2" component={Page2} />
                   <Route path="/MaintainancePortal" component={Maintainance} />
+                  <Route path="/MaintainancePortalRegistration" component={MaintainanceRegistration} />
                 </Switch>
               </div>
             {/* </Router> */}
