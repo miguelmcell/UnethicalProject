@@ -22,8 +22,12 @@ app.get('/getAccount', function (req, res) {
     // Executing the MySQL query (select all data from the 'users' table).
     let sqlQuery = 'SELECT * FROM users WHERE account_id ="' + accountId + '"';
     connection.query(sqlQuery, function(error,results,fields){
-      if(error) res.send('Err 500: Internal Server Error');
-      res.send(results);
+      if(error){
+        res.status(500).send('Err 500: Internal Server Error');
+      }
+      else{
+        res.send(results);
+      }
     });
 });
 app.post('/createAccount', function (req, res) {
@@ -36,9 +40,13 @@ app.post('/createAccount', function (req, res) {
     let sqlQuery = '' + query;
     console.log("now querying");
     connection.query(sqlQuery, function(error,results,fields){
-      if(error) res.send('Err 500: Internal Server Error');
-      console.log("it worked");
-      res.send("Account added!");
+      if(error){
+        res.status(500).send('Err 500: Internal Server Error');
+      }
+      else{
+        console.log("it worked");
+        res.send("Account added!");
+      }
     });
 });
 
