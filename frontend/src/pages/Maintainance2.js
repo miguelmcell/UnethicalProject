@@ -25,24 +25,18 @@ export default class About extends Component {
 		evt.preventDefault()
 		if (this.state.value != ''){
 			let id = Math.floor(100000000000 + Math.random() * 900000000000)
-			let query = 'INSERT%20INTO%20users(account_id,plain_text_password,name)%20VALUES%20("'+id+'","tempPassword123","'+this.state.value+'");'
-			let params = {
-				query: query
-			};
-			let formBody = [];
-			for (var property in params) {
-			  var encodedKey = encodeURIComponent(property);
-			  var encodedValue = encodeURIComponent(params[property]);
-			  formBody.push(encodedKey + "=" + encodedValue);
-			}
-			formBody = formBody.join("&");
+			// INSERT INTO users(account_id,plain_text_password,name) VALUES ('448551934522', 'Money123', 'Jimmy');
+			// 'INSERT INTO users(account_id,plain_text_password,name) VALUES (''+id+'', 'tempPassword123', ''+this.state.value+'');'
+			let query = 'INSERT INTO users(account_id,plain_text_password,name) VALUES (\''+id+'\', \'tempPassword123\', \''+this.state.value+'\');';
 
 			fetch('http://35.188.102.108:8080/createAccount',{
 				method: 'post',
-				headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
-				body: formBody
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				body: new URLSearchParams({
+					'query': query
+				}),
 			})
-			.then(response => console.log(response))
+			.then(response => response)
 			.then(users => {
 				console.log(users);
 				this.setState({welcome: "Success, Please check email for verification"});

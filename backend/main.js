@@ -41,6 +41,7 @@ app.post('/createAccount', function (req, res) {
     console.log("now querying");
     connection.query(sqlQuery, function(error,results,fields){
       if(error){
+        console.log(error);
         res.status(500).send('Err 500: Internal Server Error');
       }
       else{
