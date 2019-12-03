@@ -37,9 +37,9 @@ for script in scripts:
                     if '"' in param:
                         param = param[param.index('"') + 1:]
                         arg = param[: param.index('"')]
-                        data.append(name + ':' + arg)
+                        data.append(name + '=' + arg)
                     else:
-                        data.append(name + ':blah')
+                        data.append(name + '=blah')
                         params.append(name)
                 posts.append((url, data, params))
             else:
