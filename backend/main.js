@@ -15,9 +15,9 @@ app.use(cors());
 connection.connect();
 // 253153934829
 // Creating a GET route that returns data from the 'users' table.
-app.get('/getAccount/:accountId', function (req, res) {
+app.get('/getAccount', function (req, res) {
     // Connecting to the database
-    let accountId = req.params.accountId;
+    let accountId = req.query['accountId'];
     // Executing the MySQL query (select all data from the 'users' table).
     let sqlQuery = 'SELECT * FROM users WHERE account_id ="' + accountId + '"';
     connection.query(sqlQuery, function(error,results,fields){
