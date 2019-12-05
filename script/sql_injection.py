@@ -1,5 +1,6 @@
 import argparse
 import bs4
+import tldextract
 import os
 import requests
 from queue import Queue
@@ -17,6 +18,7 @@ parser.add_argument("--url", help="the url to begin crawling at", default="https
 parser.add_argument("--pages", help="the max number of pages to crawl", type=int, default=50)
 args = parser.parse_args()
 start = args.url
+domain = tldextract.extract(start).domain
 q = Queue()
 q.put(start)
 crawled_pages = set()
@@ -35,13 +37,17 @@ while not q.empty():
         # Crawl href links
         for url in soup.find_all('a', href=True):
             if url['href'].startswith('http://') or url['href'].startswith('https://'):
-                q.put(url['href'])
+            	# Ensure domain is the same.
+            	if domain == tldextract.extract(url['href']).domain:
+            		q.put(url['href'])
             else:
                 q.put(link + url['href'])
         # Crawl .js links
         for url in soup.find_all('script', src=True):
             if url['src'].startswith('http://') or url['src'].startswith('https://'):
-                crawled_scripts.add(url['src'])
+                # Ensure domain is the same.
+                if domain == tldextract.extract(url['src']).domain:
+                	crawled_scripts.add(url['src'])
             else:
                 crawled_scripts.add(link + url['src'])
     except:
@@ -53,15 +59,16 @@ scripts = list(crawled_scripts)
 # Part 2: extract parameterized get and post requests from pages.
 gets = [url for url in urls if '?' in url]
 posts = [] #tuple(url, data[], testable_params[]). 
-
 for script in scripts:
     try:
         page = requests.get(script).text
+        # Look at all fetch() calls in javascript.
         while FETCH_START in page:
             page = page[page.index(FETCH_START) + len(FETCH_START) - 1:]
             curr_fetch = page[: page.index(FETCH_END)]
             raw_url = curr_fetch[: curr_fetch.index(URL_END)] if URL_END in curr_fetch else curr_fetch
             url = ''
+            # Build URL from text. Assume variables are parameters.
             while '"' in raw_url:
                 end_idx = raw_url.find('"', raw_url.find('"') + 1)
                 curr_text = raw_url[1:end_idx]
@@ -69,6 +76,7 @@ for script in scripts:
                 url += curr_text
                 if url[-1:] == '=':
                     url += 'blah'
+            # If fetch is a post call, get data and testable params.
             if POST in curr_fetch and PARAMS_START in curr_fetch:
                 data = []
                 params = []
@@ -76,6 +84,7 @@ for script in scripts:
                 body = body[:body.index('}')]
                 for param in body.split(','):
                     name = param[:param.index(':')]
+                    # Assume strings are required data but not testable.
                     if '"' in param:
                         param = param[param.index('"') + 1:]
                         arg = param[: param.index('"')]
